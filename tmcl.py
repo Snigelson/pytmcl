@@ -57,16 +57,25 @@ def _calculate_checksum(data):
     """
     return (sum(ord(b) for b in data))%256
 
-# handle is an object with read() and write() methods.
-
 def send_command(handle, address, command, type, motor, value):
+    """ Send a command to a Trinamic controller.
+    handle is a file or stream object, basically anything that
+    implements write and read methods.
+    """
     data=struct.pack('>BBBBiB', address, command, type, motor, value)
     data+=struct.pack('>B',_calculate_checksum(data))
     handle.write(data)
 
-def get_result(handle, address, status, value):
+def get_result(handle):
+    """ Read a result from a Trinamic controller.
+    handle is a file or stream object, basically anything that
+    implements write and read methods.
+    Returns a tuple with controller address, status code and
+    value.
+    Raises TMCLError with appropriate error message on error.
+    """
     data=handle.read()
-    
+
     address,status,value,checksum=struct.unpack('>BxBxiB', data)
 
     if not checksum==_calculate_checksum(data[:-2]):
