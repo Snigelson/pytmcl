@@ -35,6 +35,18 @@ RFS_START=0
 RFS_STOP=1
 RFS_STATUS=2
 
+# Status code to string mapping
+status_string = {
+	100: "Successfully executed, no error",
+	101: "Command loaded into TMCL program EEPROM",
+	1:   "Wrong checksum",
+	2:   "Invalid command",
+	3:   "Wrong type",
+	4:   "Invalid value",
+	5:   "Configuration EEPROM locked",
+	6:   "Command not available"
+}
+
 def _calculate_checksum(data):
 	""" Calculate checksum.
 	Input:  Bytes object, string or array
