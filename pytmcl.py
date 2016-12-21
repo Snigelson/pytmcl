@@ -35,20 +35,26 @@ RFS_START=0
 RFS_STOP=1
 RFS_STATUS=2
 
+def _calculate_checksum(data):
+	""" Calculate checksum.
+	Input:  Bytes object, string or array
+	Output: Integer
+	"""
+	return (sum(ord(b) for b in data))%256
+
 # handle is an object with read() and write() methods.
 
 def send_command(handle, address, command, type, motor, value):
-	data=struct.pack('>BBBBiB', address, command, type, motor, value, 0)
+	data=struct.pack('>BBBBiB', address, command, type, motor, value)
+	data+=struct.pack('>B',_calculate_checksum(data))
 	handle.write(data)
 
 def get_result(handle, address, status, value):
 	data=handle.read()
 	
-	checksum_calc=sum(ord(b) for b in data)
-	
-	address,status,value,checksum=struct.unpack('>BxBxi', data)
+	address,status,value,checksum=struct.unpack('>BxBxiB', data)
 
-	if not checksum_calc==checksum:
+	if not checksum==_calculate_checksum(data[:-2]):
 		# Checksum error
 		...
 
