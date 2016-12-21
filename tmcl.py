@@ -47,6 +47,9 @@ status_string = {
     6:   "Command not available"
 }
 
+class TMCLError(Exception):
+    pass
+
 def _calculate_checksum(data):
     """ Calculate checksum.
     Input:  Bytes object, string or array
@@ -68,6 +71,10 @@ def get_result(handle, address, status, value):
 
     if not checksum==_calculate_checksum(data[:-2]):
         # Checksum error
-        ...
+        raise TMCLError(status_string[1])
+
+    if not status==100:
+        # Error from motor controller
+        raise TMCLError(status_string[status])
 
     return address, status, value
