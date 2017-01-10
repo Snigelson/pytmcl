@@ -84,6 +84,9 @@ def get_result(handle):
 
     if not status==100:
         # Error from motor controller
-        raise TMCLError(status_string[status])
+        raise TMCLError(
+            'Error {}: {}'.format(
+                status, status_string.get(status,'Unknown error')
+            )
 
     return address, status, value
