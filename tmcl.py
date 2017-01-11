@@ -17,10 +17,10 @@ class TMCLError(Exception):
 
 def _calculate_checksum(data):
     """ Calculate checksum.
-    Input:  Bytes object, string or array
+    Input:  Bytes object
     Output: Integer
     """
-    return (sum(ord(b) for b in data))%256
+    return (sum(b for b in data))%256
 
 def send_command(handle, address, command, type, motor, value):
     """ Send a command to a Trinamic controller.
