@@ -54,4 +54,4 @@ def get_result(handle):
                 status, status_string.get(status,'Unknown error')
             ))
 
-    return address, status, value
+    return address, value
