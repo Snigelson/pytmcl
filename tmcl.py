@@ -27,7 +27,7 @@ def send_command(handle, address, command, type, motor, value):
     handle is a file or stream object, basically anything that
     implements write and read methods.
     """
-    data=struct.pack('>BBBBiB', address, command, type, motor, value)
+    data=struct.pack('>BBBBi', address, command, type, motor, value)
     data+=struct.pack('>B',_calculate_checksum(data))
     handle.write(data)
 
