@@ -39,11 +39,11 @@ def get_result(handle):
     value.
     Raises TMCLError with appropriate error message on error.
     """
-    data=handle.read()
+    data=handle.read(9)
 
-    address,status,value,checksum=struct.unpack('>BxBxiB', data)
+    address,module,status,command,value,checksum=struct.unpack('>BBBBiB', data)
 
-    if not checksum==_calculate_checksum(data[:-2]):
+    if not checksum==_calculate_checksum(data[:-1]):
         # Checksum error
         raise TMCLError(status_string[1])
 
@@ -55,3 +55,4 @@ def get_result(handle):
             ))
 
     return address, value
+
