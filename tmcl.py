@@ -56,3 +56,33 @@ def get_result(handle):
 
     return address, value
 
+
+if __name__=='__main__':
+    import sys
+    import serial
+
+    def print_usage():
+	    print('Usage: {} <instruction> <type> <motor> <value> <port>'.format(sys.argv[0]))
+
+    if not len(sys.argv) == 6:
+        print_usage()
+        sys.exit(-1)
+
+    port=serial.Serial(sys.argv[5], 9600)
+
+    try:
+        port.open()
+    except OSError as e:
+        print('Error opening serial port: '+str(e))
+        sys.exit(-1)
+
+    address=1
+    instruction=int(sys.argv[1])
+    type=int(sys.argv[2])
+    motor=int(sys.argv[3])
+    value=int(sys.argv[4])
+
+    send_command(port, address, instruction, type, motor, value)
+    result=get_result(port)
+
+    print('Result: '+str(result))
