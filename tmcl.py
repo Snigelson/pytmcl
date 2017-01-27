@@ -56,13 +56,24 @@ def get_result(handle):
 
     return address, value
 
+class TMCL:
+    def __init__(self, address=1, port=None):
+        self.address=address
+        self.port=port
+
+    def send(self, instruction, type, motor, value):
+        values=[int(x) for x in
+            [self.address, instruction, type, motor, value]
+        ]
+        send_command(self.port, *values)
+        return get_result(self.port)
 
 if __name__=='__main__':
     import sys
     import serial
 
     def print_usage():
-	    print('Usage: {} <instruction> <type> <motor> <value> <port>'.format(sys.argv[0]))
+        print('Usage: {} <instruction> <type> <motor> <value> <port>'.format(sys.argv[0]))
 
     if not len(sys.argv) == 6:
         print_usage()
